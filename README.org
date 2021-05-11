@@ -27,15 +27,17 @@ printf ./example/out.html
 #+RESULTS:
 [[file:./example/out.html]]
 
-Here, each `-f` denotes the axes in order, with `:Q` signifying they are
-quantitative data (`N`, `O`, `Q`, or `T` for nominal, ordinal, quantitiative, or
-temporal measurements, respectively). The data is colored by `-c`, nominal data,
-with a `Circle` mark (lists of marks availabel at
+Here, each =-f= denotes the axes in order, with =:Q= signifying they are
+quantitative data (=N=, =O=, =Q=, or =T= for nominal, ordinal, quantitiative, or
+temporal measurements, respectively). The data is colored by =-c=, nominal data,
+with a =Circle= mark (lists of marks availabel at
 https://hackage.haskell.org/package/hvega-0.11.0.1/docs/Graphics-Vega-VegaLite.html#t:Mark).
-For additional information, see `ploterific -h`.
+For additional information, see =ploterific -h=.
 
 *Importantly*, any observations with feature numbers that cannot be parsed will
 be thrown out automatically! Also note, if there is any kind of non-Haskell
-issue (seen by `cat out.html`).
+issue (seen by =cat out.html=), then it is probably due to =vega-lite= (for
+instance, having periods in column names will not work), so check =vega-lite='s
+documentation first.
 
  
