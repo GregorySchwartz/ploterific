@@ -115,6 +115,21 @@ enc color fs =
                     )
         )
         color
+    . VL.tooltips
+        ( fmap (\ (Feature !f)
+               -> [ VL.TName . getColName $ f ]
+                 <> maybe [] (\x -> [VL.TmType x]) (getColMeasurement f)
+               )
+          fs
+       <> [ maybe
+              []
+              (\ (Color c)
+              -> [VL.TName . getColName $ c]
+              <> maybe [] (\x -> [VL.TmType x]) (getColMeasurement c)
+              )
+              color
+          ]
+        )
     . foldl'
         (\ acc (!p, Feature !f)
         -> VL.position
@@ -150,6 +165,8 @@ plot = do
                   , enc color' features' []
                   , VL.mark mark' []
                   , VL.theme VL.defaultConfig []
+                  , VL.selection . VL.select "view" VL.Interval [VL.BindScales]
+                  $ []
                   ]
                  <> maybe [] (\(Height x) -> [VL.height x]) height'
                  <> maybe [] (\(Width x) -> [VL.width x]) width'
