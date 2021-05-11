@@ -25,7 +25,6 @@ cat iris.csv | sed "1i sepalLength,sepalWidth,petalLength,petalWidth,class" | pl
 printf ./example/out.html
 #+end_src
 
-#+RESULTS:
 [[file:./example/out.html]]
 
 Here, each =-f= denotes the axes in order, with =:Q= signifying they are
