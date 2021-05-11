@@ -17,6 +17,7 @@ nix-env -f default.nix -i ploterific
 Based on some tabular data, for instance:
 
 #+HEADER: :results file
+#+HEADER: :exports both
 #+begin_src bash
 mkdir example
 wget -O iris.csv "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
