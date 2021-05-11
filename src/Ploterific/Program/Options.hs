@@ -26,7 +26,6 @@ data Options
               , output :: Maybe String <?> "([STDOUT] | PATH) HTML output path."
               , feature :: [String] <?> "(COLUMN) A list of columns to use in the plot in the format --feature col1 --feature col2 etc. for axes X, Y, etc. To force a measurement, add `:` followed by `N`, `O`, `Q`, or `T` for nominal, ordinal, quantitiative, or temporal measurements, respectively. Full list of measurements located at https://vega.github.io/vega-lite/docs/type.html."
               , color :: Maybe String <?> "(NOTHING | COLUMN) The column containing a feature to use for colors. Add measurement according to --feature if needed."
-              , measurement :: [String] <?> "(Nothing | MEASUREMENT) Specify the level of measurement for each --feature in order. For instance, --feature col1 --feature col2 --measurement quantitative --measurement nominal. "
               , mark :: String <?> "(MARK) The mark type for the plot. Common types are Circle, Bar, Boxplot, and Line. See https://hackage.haskell.org/package/hvega-0.11.0.1/docs/Graphics-Vega-VegaLite.html#t:Mark for a list."
               , delimiter :: Maybe Char <?> "([,] | CHAR) The delimiter for the table."
               , height :: Maybe Double <?> "(Nothing | DOUBLE) The height of the plot."

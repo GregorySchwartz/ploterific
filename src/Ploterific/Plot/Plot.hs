@@ -15,6 +15,7 @@ module Ploterific.Plot.Plot
 import Control.Monad.Reader (ReaderT (..), asks, liftIO)
 import Data.Bool (bool)
 import Data.Char (ord)
+import Data.Either (rights)
 import Data.List (foldl')
 import Data.Maybe (fromMaybe)
 import qualified Control.Lens as L
@@ -96,9 +97,12 @@ rowsToDataColumns color fs rows =
         . getColMeasurement
         $ x
     textToNumbers x = VL.Numbers
+                    . fmap fst
+                    . rights
                     . fmap ( maybe
-                              (error "Can not parse number in column")
-                              (either error fst . T.double)
+                              ( error
+                              $ "Column not in table: " <> show (getColName x))
+                              T.double
                            . Map.lookup (getColName x)
                            )
     textToString x = VL.Strings . fmap (fromMaybe "" . Map.lookup (getColName x))
