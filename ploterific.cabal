@@ -1,5 +1,5 @@
 name:                ploterific
-version:             0.1.0.1
+version:             0.1.1.0
 synopsis:            Basic plotting of tabular data for the command line.
 description:         A quick and easy way to plot tabular data from the command line. Meant for quick visualizations, not too customizable.
 homepage:            http://github.com/GregorySchwartz/ploterific#readme

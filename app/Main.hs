@@ -30,6 +30,8 @@ main = do
 
   let opts = Opts { _color = fmap (Color . T.pack) . unHelpful . color $ options
                   , _features = fmap (Feature . T.pack) . unHelpful . feature $ options
+                  , _facet = fmap (Facet . T.pack) . unHelpful . facet $ options
+                  , _facetNum = fmap FacetNum . unHelpful . facetNum $ options
                   , _delimiter = Delimiter . fromMaybe ',' . unHelpful . delimiter $ options
                   , _input = fmap Input . unHelpful . input $ options
                   , _output = fmap Output . unHelpful . output $ options

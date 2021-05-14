@@ -17,7 +17,8 @@ import Data.Bool (bool)
 import Data.Char (ord)
 import Data.Either (rights)
 import Data.List (foldl')
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isJust)
+import GHC.Natural (intToNatural)
 import qualified Control.Lens as L
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.ByteString.Char8 as B
@@ -65,20 +66,29 @@ loadCsv (Delimiter d) =
 
 -- | Convert rows to data columns.
 rowsToDataColumns :: Maybe Color
+                  -> Maybe Facet
                   -> [Feature]
                   -> [Map.Map T.Text T.Text]
                   -> [VL.DataColumn]
                   -> VL.Data
-rowsToDataColumns color fs rows =
+rowsToDataColumns color facet fs rows =
   VL.dataFromColumns []
     . maybe
         id
-        (\ (Color c)
+        (\ (Color x)
         -> VL.dataColumn
-            (getColName c)
-            (numOrString (textToString c) c rows)
+            (getColName x)
+            (numOrString (textToString x) x rows)
         )
         color
+    . maybe
+        id
+        (\ (Facet x)
+        -> VL.dataColumn
+            (getColName x)
+            (numOrString (textToString x) x rows)
+        )
+        facet
     . foldl'
         (\ acc (Feature x)
         -> VL.dataColumn
@@ -158,22 +168,32 @@ plot = do
   mark' <- asks _mark
   color' <- asks _color
   features' <- asks _features
+  facet' <- asks _facet
+  facetNum' <- asks _facetNum
   delimiter' <- asks _delimiter
 
   contents <- liftIO input'
 
   let dataSet =
-        rowsToDataColumns color' features' . loadCsv delimiter' $ contents
+        rowsToDataColumns color' facet' features' . loadCsv delimiter' $ contents
+      facetSpec (Facet x) = [ VL.facetFlow
+                            $ [VL.FName . getColName $ x]
+                           <> maybe [] (\y -> [VL.FmType y]) (getColMeasurement x)
+                            ]
+      plotSpec = [ enc color' features' []
+                 , VL.mark mark' []
+                 , VL.selection . VL.select "view" VL.Interval [VL.BindScales]
+                 $ []
+                 ]
       p       = VL.toVegaLite
               $   [ dataSet []
-                  , enc color' features' []
-                  , VL.mark mark' []
                   , VL.theme VL.defaultConfig []
-                  , VL.selection . VL.select "view" VL.Interval [VL.BindScales]
-                  $ []
                   ]
+                 <> bool plotSpec [VL.specification . VL.asSpec $ plotSpec] (isJust facet')
                  <> maybe [] (\(Height x) -> [VL.height x]) height'
                  <> maybe [] (\(Width x) -> [VL.width x]) width'
+                 <> maybe [] facetSpec facet'
+                 <> maybe [] (\(FacetNum x) -> [VL.columns $ intToNatural x]) facetNum'
 
   liftIO . output' $ VL.toHtml p
 
