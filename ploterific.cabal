@@ -1,5 +1,5 @@
 name:                ploterific
-version:             0.1.1.0
+version:             0.2.0.0
 synopsis:            Basic plotting of tabular data for the command line.
 description:         A quick and easy way to plot tabular data from the command line. Meant for quick visualizations, not too customizable.
 homepage:            http://github.com/GregorySchwartz/ploterific#readme
@@ -21,12 +21,14 @@ library
   build-depends:       base >= 4.7 && < 5
                      , bytestring
                      , cassava
+                     , colour
                      , containers
                      , hvega
                      , hvega-theme
                      , lens
                      , mtl
                      , optparse-generic
+                     , palette
                      , text
   ghc-options:         -O2
   default-language:    Haskell2010

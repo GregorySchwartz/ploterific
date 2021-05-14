@@ -13,6 +13,9 @@ let
   #Package
   pkg = compiler.developPackage {
     root = ./.;
+    overrides = self: super: (with pkgs.haskell.lib; with pkgs.haskellPackages; {
+      palette = doJailbreak super.palette;
+    });
   };
   buildInputs = [
                   pkgs.ghcid

@@ -28,6 +28,7 @@ newtype Input = Input { unInput :: String } deriving (Read, Show)
 newtype Output = Output { unOutput :: String } deriving (Read, Show)
 newtype Height = Height { unHeight :: Double } deriving (Read, Show)
 newtype Width = Width { unWidth :: Double } deriving (Read, Show)
+newtype ColorLabel = ColorLabel { unColorLabel :: T.Text } deriving (Read, Show)
 
 -- Advanced
 data Opts = Opts { _color :: Maybe Color

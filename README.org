@@ -6,7 +6,9 @@ customizable.
 
 ** News
 
-Version 0.1.1.0 supports Trellis plots with =--facet=!
+- Version 0.2.0.0 changes the color scheme to Set1 and allows an arbitrary
+  number of categories.
+- Version 0.1.1.0 supports Trellis plots with =--facet=!
 
 ** Installation
 

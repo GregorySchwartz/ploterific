@@ -15,6 +15,9 @@ module Ploterific.Plot.Plot
 import Control.Monad.Reader (ReaderT (..), asks, liftIO)
 import Data.Bool (bool)
 import Data.Char (ord)
+import Data.Colour.Palette.BrewerSet ( brewerSet, ColorCat (..) )
+import Data.Colour.Palette.Harmony (colorRamp)
+import Data.Colour.SRGB (sRGB24show)
 import Data.Either (rights)
 import Data.List (foldl')
 import Data.Maybe (fromMaybe, isJust)
@@ -26,6 +29,7 @@ import qualified Data.Csv.Streaming as CSVStream
 import qualified Data.Csv as CSV
 import qualified Data.Foldable as F
 import qualified Data.Map.Strict as Map
+import qualified Data.Set as Set
 import qualified Data.Text as T
 import qualified Data.Text.Lazy.IO as TL
 import qualified Data.Text.Read as T
@@ -117,18 +121,32 @@ rowsToDataColumns color facet fs rows =
                            )
     textToString x = VL.Strings . fmap (fromMaybe "" . Map.lookup (getColName x))
 
+-- | Get color encoding for color ramps.
+labelColorScale :: [ColorLabel] -> VL.MarkChannel
+labelColorScale cs = VL.MScale [ VL.SDomain (VL.DStrings labels)
+                               , VL.SRange (VL.RStrings colors)
+                               ]
+  where
+    labels =
+      Set.toAscList . Set.fromList . fmap unColorLabel $ cs
+    colors =
+      fmap (T.pack . sRGB24show) . colorRamp (length labels) . brewerSet Set1 $ 9
+
 -- | Get the encoding.
-enc :: Maybe Color -> [Feature] -> [VL.EncodingSpec] -> VL.PropertySpec
-enc color fs =
+enc :: Maybe (Color, [ColorLabel])
+    -> [Feature]
+    -> [VL.EncodingSpec]
+    -> VL.PropertySpec
+enc colorInfo fs =
   VL.encoding
     . maybe
         id
-        (\ (Color c)
-        -> VL.color ( [VL.MName . getColName $ c]
+        (\ (Color c, ls)
+        -> VL.color ( [VL.MName . getColName $ c, labelColorScale ls]
                    <> maybe [] (\x -> [VL.MmType x]) (getColMeasurement c)
                     )
         )
-        color
+        colorInfo
     . VL.tooltips
         ( fmap (\ (Feature !f)
                -> [ VL.TName . getColName $ f ]
@@ -137,11 +155,11 @@ enc color fs =
           fs
        <> [ maybe
               []
-              (\ (Color c)
+              (\ (Color c, _)
               -> [VL.TName . getColName $ c]
               <> maybe [] (\x -> [VL.TmType x]) (getColMeasurement c)
               )
-              color
+              colorInfo
           ]
         )
     . foldl'
@@ -174,13 +192,21 @@ plot = do
 
   contents <- liftIO input'
 
-  let dataSet =
-        rowsToDataColumns color' facet' features' . loadCsv delimiter' $ contents
+  let rows = loadCsv delimiter' contents
+      dataSet =
+        rowsToDataColumns color' facet' features' $ rows
+      colorLabels =
+        fmap
+          (\ (Color c)
+          -> fmap (ColorLabel . fromMaybe "" . Map.lookup (getColName c)) rows
+          )
+          color'
+      colorInfo = (,) <$> color' <*> colorLabels
       facetSpec (Facet x) = [ VL.facetFlow
                             $ [VL.FName . getColName $ x]
                            <> maybe [] (\y -> [VL.FmType y]) (getColMeasurement x)
                             ]
-      plotSpec = [ enc color' features' []
+      plotSpec = [ enc colorInfo features' []
                  , VL.mark mark' []
                  , VL.selection . VL.select "view" VL.Interval [VL.BindScales]
                  $ []
