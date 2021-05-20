@@ -44,5 +44,3 @@ be thrown out automatically! Also note, if there is any kind of non-Haskell
 issue (seen by =cat out.html=), then it is probably due to =vega-lite= (for
 instance, having periods in column names will not work), so check =vega-lite='s
 documentation first.
-
- 
