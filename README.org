@@ -28,10 +28,9 @@ Based on some tabular data, for instance:
 mkdir example
 wget -O iris.csv "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
 cat iris.csv | sed "1i sepalLength,sepalWidth,petalLength,petalWidth,class" | ploterific -f "sepalLength:Q" -f "sepalWidth:Q" -c "class:N" -m Circle > example/out.html
-printf ./example/out.html
 #+end_src
 
-[[file:./example/out.html]]
+[[file:./example/out.png]]
 
 Here, each =-f= denotes the axes in order, with =:Q= signifying they are
 quantitative data (=N=, =O=, =Q=, or =T= for nominal, ordinal, quantitiative, or
