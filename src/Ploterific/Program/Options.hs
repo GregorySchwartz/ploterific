@@ -32,22 +32,24 @@ data Options
               , delimiter :: Maybe Char <?> "([,] | CHAR) The delimiter for the table."
               , height :: Maybe Double <?> "(Nothing | DOUBLE) The height of the plot."
               , width :: Maybe Double <?> "(Nothing | Double) The width of the plot."
+              , defaultTheme :: Bool <?> "Whether to use the default theme of vega-lite."
               } deriving (Generic)
 
 modifiers :: Modifiers
 modifiers = lispCaseModifiers { shortNameModifier = short }
   where
-    short "input"       = Just 'i'
-    short "output"      = Just 'o'
-    short "feature"     = Just 'f'
-    short "facet"       = Just 't'
-    short "facet-num"   = Just 'n'
-    short "color"       = Just 'c'
-    short "mark"        = Just 'm'
-    short "delimiter"   = Just 'd'
-    short "height"      = Just 'h'
-    short "width"       = Just 'w'
-    short x             = firstLetter x
+    short "input"         = Just 'i'
+    short "output"        = Just 'o'
+    short "feature"       = Just 'f'
+    short "facet"         = Just 't'
+    short "facet-num"     = Just 'n'
+    short "color"         = Just 'c'
+    short "mark"          = Just 'm'
+    short "delimiter"     = Just 'd'
+    short "height"        = Just 'h'
+    short "width"         = Just 'w'
+    short "default-theme" = Just 'D'
+    short x               = firstLetter x
 
 instance ParseRecord Options where
     parseRecord = parseRecordWithModifiers modifiers

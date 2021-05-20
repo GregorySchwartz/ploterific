@@ -29,6 +29,7 @@ newtype Output = Output { unOutput :: String } deriving (Read, Show)
 newtype Height = Height { unHeight :: Double } deriving (Read, Show)
 newtype Width = Width { unWidth :: Double } deriving (Read, Show)
 newtype ColorLabel = ColorLabel { unColorLabel :: T.Text } deriving (Read, Show)
+newtype DefaultTheme = DefaultTheme { unDefaultTheme :: Bool } deriving (Read, Show)
 
 -- Advanced
 data Opts = Opts { _color :: Maybe Color
@@ -41,6 +42,7 @@ data Opts = Opts { _color :: Maybe Color
                  , _mark :: VL.Mark
                  , _height :: Maybe Height
                  , _width :: Maybe Width
+                 , _defaultTheme :: DefaultTheme
                  }
 
 deriving instance Read VL.Mark

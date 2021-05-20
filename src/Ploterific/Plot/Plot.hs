@@ -189,6 +189,7 @@ plot = do
   facet' <- asks _facet
   facetNum' <- asks _facetNum
   delimiter' <- asks _delimiter
+  defaultTheme' <- asks _defaultTheme
 
   contents <- liftIO input'
 
@@ -213,13 +214,13 @@ plot = do
                  ]
       p       = VL.toVegaLite
               $   [ dataSet []
-                  , VL.theme VL.defaultConfig []
                   ]
                  <> bool plotSpec [VL.specification . VL.asSpec $ plotSpec] (isJust facet')
                  <> maybe [] (\(Height x) -> [VL.height x]) height'
                  <> maybe [] (\(Width x) -> [VL.width x]) width'
                  <> maybe [] facetSpec facet'
                  <> maybe [] (\(FacetNum x) -> [VL.columns $ intToNatural x]) facetNum'
+                 <> bool [VL.theme VL.defaultConfig []] [] (unDefaultTheme defaultTheme')
 
   liftIO . output' $ VL.toHtml p
 

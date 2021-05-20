@@ -42,6 +42,7 @@ main = do
                           $ options
                   , _height = fmap Height . unHelpful . height $ options
                   , _width = fmap Width . unHelpful . width $ options
+                  , _defaultTheme = DefaultTheme . unHelpful . defaultTheme $ options
                   }
 
   runReaderT plot opts
