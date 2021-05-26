@@ -9,6 +9,7 @@ Collects the functions pertaining to the plotting of figures.
 
 module Ploterific.Plot.Plot
   ( plot
+  , labelColorScale
   ) where
 
 -- Remote
