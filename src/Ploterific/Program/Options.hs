@@ -42,13 +42,13 @@ modifiers = lispCaseModifiers { shortNameModifier = short }
     short "output"        = Just 'o'
     short "feature"       = Just 'f'
     short "facet"         = Just 't'
-    short "facet-num"     = Just 'n'
+    short "facetNum"      = Just 'n'
     short "color"         = Just 'c'
     short "mark"          = Just 'm'
     short "delimiter"     = Just 'd'
     short "height"        = Just 'h'
     short "width"         = Just 'w'
-    short "default-theme" = Just 'D'
+    short "defaultTheme"  = Just 'D'
     short x               = firstLetter x
 
 instance ParseRecord Options where
