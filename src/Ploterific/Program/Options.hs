@@ -46,8 +46,8 @@ modifiers = lispCaseModifiers { shortNameModifier = short }
     short "color"         = Just 'c'
     short "mark"          = Just 'm'
     short "delimiter"     = Just 'd'
-    short "height"        = Just 'h'
-    short "width"         = Just 'w'
+    short "height"        = Just 'H'
+    short "width"         = Just 'W'
     short "defaultTheme"  = Just 'D'
     short x               = firstLetter x
 
