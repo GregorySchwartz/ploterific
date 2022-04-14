@@ -134,16 +134,18 @@ labelColorScale cs = VL.MScale [ VL.SDomain (VL.DStrings labels)
       fmap (T.pack . sRGB24show) . colorRamp (length labels) . brewerSet Set1 $ 9
 
 -- | Get the encoding.
-enc :: Maybe (Color, [ColorLabel])
+enc :: DefaultTheme
+    -> Maybe (Color, [ColorLabel])
     -> [Feature]
     -> [VL.EncodingSpec]
     -> VL.PropertySpec
-enc colorInfo fs =
+enc defaultTheme' colorInfo fs =
   VL.encoding
     . maybe
         id
         (\ (Color c, ls)
-        -> VL.color ( [VL.MName . getColName $ c, labelColorScale ls]
+        -> VL.color ( [VL.MName . getColName $ c]
+                   <> bool [labelColorScale ls] [] (unDefaultTheme defaultTheme')
                    <> maybe [] (\x -> [VL.MmType x]) (getColMeasurement c)
                     )
         )
@@ -208,7 +210,7 @@ plot = do
                             $ [VL.FName . getColName $ x]
                            <> maybe [] (\y -> [VL.FmType y]) (getColMeasurement x)
                             ]
-      plotSpec = [ enc colorInfo features' []
+      plotSpec = [ enc defaultTheme' colorInfo features' []
                  , VL.mark mark' []
                  , VL.selection . VL.select "view" VL.Interval [VL.BindScales]
                  $ []
